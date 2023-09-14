@@ -1,5 +1,5 @@
 const electron = require('electron')
-const { WindowManager } = require('./window_manager');
+const { WindowManager } = require('../window_manager');
 const parser = require('node-html-parser');
 const path = require('node:path');
 

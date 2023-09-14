@@ -1,8 +1,8 @@
 const electron = require('electron')
-const { mainWindow } = require("./mainwindow") 
-const { elementRecorderWindow } = require('./element_recorder')
+const { mainWindow } = require("./windows/mainwindow") 
+const { elementRecorderWindow } = require('./windows/element_recorder')
 
 electron.app.whenReady().then(() => {
-    // mainWindow();
+    mainWindow();
     elementRecorderWindow();
 })

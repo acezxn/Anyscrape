@@ -3,19 +3,31 @@
     --widget_color: rgb(67, 67, 67);
     --widget_hover_color: rgb(100, 100, 100);
     --foreground_color: white;
+    --accent-color: rgb(255, 0, 0);
     --border_color: rgb(100, 100, 100);
     --standard_font: system-ui;
+
+    --monospace_font: 'Courier New', Courier, monospace;
+
+    --standard_fontsize: 14px;
+    --small_fontsize: 10px;
 }
 
 body {
     background-color: var(--background_color);
     color: var(--foreground_color);
+    font-size: var(--standard_fontsize);
     font-family: var(--standard_font);
 }
 
 label {
     display: inline-block;
     width: 30vw;
+}
+
+small {
+    display: inline-block;
+    font-size: var(--small_fontsize);
 }
 
 textarea {
@@ -25,12 +37,20 @@ textarea {
     margin-right: auto;
     color: var(--foreground_color);
     background-color: var(--background_color);
+    font-family: var(--monospace_font);
 }
 
 input[type="text"] {
     color: var(--foreground_color);
     background-color: var(--background_color);
     padding: 5px 5px;
+    border: 1px solid var(--border_color);
+    font-family: var(--monospace_font);
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    accent-color: var(--accent-color);
     border: 1px solid var(--border_color);
 }
 

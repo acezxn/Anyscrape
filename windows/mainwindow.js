@@ -1,8 +1,8 @@
 const electron = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const path = require('node:path');
-const { WindowManager } = require('./window_manager');
-const { menu_template } = require("./constants/menu_template")
+const { WindowManager } = require('../window_manager');
+const { menu_template } = require("../constants/menu_template")
 
 const mainWindow = () => {
     var menu = electron.Menu.buildFromTemplate([
