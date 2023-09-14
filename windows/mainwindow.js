@@ -44,6 +44,13 @@ const mainWindow = () => {
             });
     }
 
+    function send_page_html() {
+        window.webContents.executeJavaScript("window.electronAPI.sendPageHTML(document.body.innerHTML);")
+            .catch(function (e) {
+                console.log("HTML Read error", e);
+            });
+    }
+
     electronLocalshortcut.register(window, 'F12', () => {
         let mouse_position = electron.screen.getCursorScreenPoint();
         let bounds = window.getContentBounds();
@@ -55,20 +62,17 @@ const mainWindow = () => {
             });
     });
 
-    window.webContents.on('did-finish-load', () => {
-        console.log("disable zoom");
-        window.webContents.executeJavaScript("window.electronAPI.sendPageHTML(document.body.innerHTML);")
-            .catch(function (e) {
-                console.log("HTML Read error", e);
-            });
+    window.webContents.on('did-stop-loading', (e) => {
+        send_page_html();
     });
+    
     window.webContents.setWindowOpenHandler(() => {
         return { action: "deny" };
     });
 
     electron.Menu.setApplicationMenu(menu);
-    window.loadURL('https://www.facebook.com/people/Jessica-Lee/pfbid0dGw8jULZHxSNYtTusyzdAP2uHvnFANsa8v886zP7AYiNAnXdZXThqqZhg3eCX8T5l/');
-    // window.loadURL('https://acezxn.github.io/Pathtracker-online/#/about');
+    // window.loadURL('https://www.facebook.com/profile.php?id=100029072525833');
+    window.loadURL('https://acezxn.github.io/Pathtracker-online/#/about');
     // window.loadFile("test.html");
 
     // window.webContents.toggleDevTools();

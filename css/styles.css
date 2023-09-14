@@ -31,13 +31,16 @@ small {
 }
 
 textarea {
-    width: 90vw;
-    display: block;
+    width: 99%;
+    height: 20vw;
+    display: inline-block;
     margin-left: auto;
     margin-right: auto;
     color: var(--foreground_color);
     background-color: var(--background_color);
     font-family: var(--monospace_font);
+    border: solid 1px var(--border_color);
+    border-radius: 5px;
 }
 
 input[type="text"] {
