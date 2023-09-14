@@ -1,0 +1,18 @@
+{
+  "name": "anyscrape",
+  "version": "1.0.0",
+  "description": "scrape anything",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "acezxn",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^26.2.1"
+  },
+  "dependencies": {
+    "electron-localshortcut": "^3.2.1",
+    "node-html-parser": "^6.1.9"
+  }
+}
