@@ -2,10 +2,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-        <title>Record element</title>
+        <title>Anyscrape Reader</title>
         <link rel="stylesheet" href="../css/styles.css">
     </head>
     <body>
+        <label>URL:</label>
+        <input type="text" id="url_input">
+        <button id="search_button">Search</button>
+        <br />
+        <br />
+        <label>Selected html:</label>
         <textarea id="tag_html_display" readonly>
         </textarea> 
         <br />
@@ -35,7 +41,7 @@
         <small>Enable</small>
         <br />
 
-        <a class="button" id="export_button" href="data:application/xml;charset=utf-8,your code here" download="filename.json">Export</a>
+        <a class="button" id="export_button" href="data:application/xml;charset=utf-8,your code here" download="element_data.json">Export</a>
         <br />
         <script src="../windows/renderer.js"></script>
     </body>

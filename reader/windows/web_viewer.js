@@ -4,6 +4,12 @@ const path = require('node:path');
 const { WindowManager } = require('../window_manager');
 const { menu_template } = require("../constants/menu_template")
 
+var ipc = electron.ipcMain;
+
+/**
+ * The web viewer UI
+ *
+ */
 const webViewer = () => {
     var menu = electron.Menu.buildFromTemplate([
         menu_template
@@ -52,20 +58,21 @@ const webViewer = () => {
             });
     }
 
-    window.webContents.on('did-stop-loading', (e) => {
-        send_page_html();
+    // on receiving search url
+    ipc.on('search_url', (event, url) => {
+        window.loadURL(url);
     });
-    window.webContents.on('dom-ready', (e) => {
-        send_page_html();
-    });
+    // disable open new window
     window.webContents.setWindowOpenHandler(() => {
         return { action: "deny" };
     });
+    // delete window when closed
     window.on("closed", () => {
         WindowManager.windows.delete(window);
         window = null;
     });
 
+    // shortcut to select html element
     electronLocalshortcut.register(window, 'F12', () => {
         let mouse_position = electron.screen.getCursorScreenPoint();
         let bounds = window.getContentBounds();
@@ -78,9 +85,7 @@ const webViewer = () => {
     });
 
     electron.Menu.setApplicationMenu(menu);
-    window.loadURL('https://www.facebook.com/profile.php?id=100029072525833');
-    // window.loadURL('https://acezxn.github.io/Pathtracker-online/#/about');
-    // window.loadFile("test.html");
+    window.loadFile("./html/manual.html");
 
     // window.webContents.toggleDevTools();
     WindowManager.windows.add(window);

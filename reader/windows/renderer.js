@@ -28,6 +28,10 @@ window.electronAPI.handleElementData((event, data) => {
     tag_location_enable.checked = data.tag_location !== "";
 });
 
+/**
+ * Handles export to json request
+ *
+ */
 function handle_export() {
     let export_button          = document.getElementById("export_button");
     const tag_name_enable      = document.getElementById("tag_name_enable");
@@ -66,4 +70,29 @@ function handle_export() {
     console.log("export");
 }
 
+/**
+ * Sends search url to web viewer to load page
+ *
+ */
+function send_search_url() {
+    const url_input = document.getElementById("url_input");
+    if (url_input.value !== "") {
+        window.electronAPI.searchURL(url_input.value);
+    }
+}
+
+
+/**
+ * Detects special keypress on the searchbar
+ *
+ * @param {Event} e
+ */
+function searchbar_keypress(e) {
+    if (e.keyCode === 13) {
+        send_search_url();
+    }
+}
+
 document.getElementById("export_button").addEventListener("click", handle_export);
+document.getElementById("search_button").addEventListener("click", send_search_url);
+document.getElementById("url_input").addEventListener("keypress", searchbar_keypress);

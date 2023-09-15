@@ -49,6 +49,7 @@ input[type="text"] {
     padding: 5px 5px;
     border: 1px solid var(--border_color);
     font-family: var(--monospace_font);
+    width: 45vw;
 }
 
 input[type="checkbox"] {
@@ -69,5 +70,20 @@ a[class="button"] {
 }
 
 a[class="button"]:hover {
+    background-color: var(--widget_hover_color);
+}
+
+button {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--foreground_color);
+    background-color: var(--widget_color);
+    border: 1px solid var(--border_color);
+    border-radius: 5px;
+    font-family: var(--standard_font);
+    padding: 5px 5px;
+}
+
+button:hover {
     background-color: var(--widget_hover_color);
 }
