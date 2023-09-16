@@ -1,0 +1,16 @@
+{
+  "name": "anyscrape",
+  "version": "1.0.0",
+  "description": "Scrape anything",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start" : "node index.js"
+  },
+  "author": "acezxn",
+  "license": "ISC",
+  "dependencies": {
+    "node-html-parser": "^6.1.10",
+    "puppeteer": "^21.2.1"
+  }
+}
