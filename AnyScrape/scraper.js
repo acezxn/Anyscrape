@@ -142,7 +142,7 @@ export default class Scraper {
                 }
 
                 for (let index = Math.max(Math.min(offset, root.childNodes.length-1), 0); 
-                    index < root.childNodes.length; index+=Math.max(multiplier, 0)) {
+                    index < root.childNodes.length; index+=multiplier) {
                     search(root.childNodes[index], depth+1);
                 }
                 return;
