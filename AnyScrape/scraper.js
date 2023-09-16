@@ -1,7 +1,11 @@
 import { parse } from 'node-html-parser';
 import { readFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
+import { ConeGeometry } from 'three';
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 export default class Scraper {
     constructor(url) {
         this.browser = null;
@@ -42,8 +46,8 @@ export default class Scraper {
     /**
      * Filters out elements by attributes listed in configuration
      *
-     * @param {HTMLElement[]} elements_array element array to be filtered
-     * @returns {HTMLElement[]} filtered element array
+     * @param {parse.HTMLElement[]} elements_array element array to be filtered
+     * @returns {parse.HTMLElement[]} filtered element array
      * @memberof Scraper
      */
     filter_by_attribute(elements_array) {
@@ -54,32 +58,34 @@ export default class Scraper {
             let element_id = "";
             let element_type = "";
 
-            // filter out elements with name unmatch
-            if (this.config.tag_name !== "") {
-                element_name = element.rawTagName;
-                if (element_name !== this.config.tag_name) {
-                    continue;
+            if (element instanceof parse.HTMLElement) {
+                // filter out elements with name unmatch
+                if (this.config.tag_name !== "") {
+                    element_name = element.rawTagName;
+                    if (element_name !== this.config.tag_name) {
+                        continue;
+                    }
                 }
-            }
-            // filter out elements with class unmatch
-            if (this.config.tag_class !== "") {
-                element_class = element.getAttribute("class");
-                if (element_class !== this.config.tag_class) {
-                    continue;
+                // filter out elements with class unmatch
+                if (this.config.tag_class !== "") {
+                    element_class = element.getAttribute("class");
+                    if (element_class !== this.config.tag_class) {
+                        continue;
+                    }
                 }
-            }
-            // filter out elements with id unmatch
-            if (this.config.tag_id !== "") {
-                element_id = element.getAttribute("id");
-                if (element_id !== this.config.tag_id) {
-                    continue;
+                // filter out elements with id unmatch
+                if (this.config.tag_id !== "") {
+                    element_id = element.getAttribute("id");
+                    if (element_id !== this.config.tag_id) {
+                        continue;
+                    }
                 }
-            }
-            // filter out elements with type unmatch
-            if (this.config.tag_type !== "") {
-                element_type = element.getAttribute("type");
-                if (element_type !== this.config.tag_type) {
-                    continue;
+                // filter out elements with type unmatch
+                if (this.config.tag_type !== "") {
+                    element_type = element.getAttribute("type");
+                    if (element_type !== this.config.tag_type) {
+                        continue;
+                    }
                 }
             }
             tmp_elements.push(element);
@@ -90,14 +96,14 @@ export default class Scraper {
     /**
      * Filter the page's html with location
      *
-     * @returns {HTMLElement[]}  
+     * @returns {parse.HTMLElement[]}  
      * @memberof Scraper filtered element array
      */
     filter_by_location() {
         var tmp_elements = [];
         var parsed_location = this.config.tag_location.split(".");
 
-        function search(root, depth=0) {
+        function search(root, depth = 0) {
             if (root === undefined) {
                 return;
             }
@@ -105,7 +111,7 @@ export default class Scraper {
                 tmp_elements.push(root);
                 return;
             }
-            
+
             let location = parsed_location[depth];
             let operands = [];
             let multiplier_changed = false;
@@ -114,10 +120,10 @@ export default class Scraper {
             let operator_idx = 0;
 
             // evaluates equation if it is
-            if (!/^[0-9]*$/.test(location)) {     
-                location = location.toLowerCase().replace(" ", "");                
+            if (!/^[0-9]*$/.test(location)) {
+                location = location.toLowerCase().replace(" ", "");
                 operands = location.split(/[+-]+/);
-                for (let index = 0; index < operands.length; index++) { 
+                for (let index = 0; index < operands.length; index++) {
                     if (operands[index].includes("x")) {
                         if (operands[index].length > 1) {
                             let amount = parseInt(operands[index].replace("x", ""));
@@ -131,7 +137,7 @@ export default class Scraper {
                         let amount = parseInt(operands[index]);
                         offset += location[operator_idx] === "-" ? -amount : amount;
                     }
-                     
+
                     if (operands[index].length !== 0) {
                         operator_idx += operands[index].length;
                     }
@@ -141,21 +147,29 @@ export default class Scraper {
                     multiplier = 0;
                 }
 
-                for (let index = Math.max(Math.min(offset, root.childNodes.length-1), 0); 
-                    index < root.childNodes.length; index+=multiplier) {
-                    search(root.childNodes[index], depth+1);
+                for (let index = Math.max(Math.min(offset, root.childNodes.length - 1), 0);
+                    index < root.childNodes.length; index += multiplier) {
+                    search(root.childNodes[index], depth + 1);
                 }
                 return;
             }
-            return search(root.childNodes[parseInt(location)], depth+1);
+            return search(root.childNodes[parseInt(location)], depth + 1);
         }
 
         search(this.parsed_page_html);
         return tmp_elements;
     }
 
-    async scrape(url) {
+    /**
+     * Scrape the url
+     *
+     * @param {*} url url to scrape
+     * @param {*} delay_ms millisecond delay before grabbing html
+     * @memberof Scraper
+     */
+    async scrape(url, delay_ms) {
         await this.goto(url);
+        await sleep(delay_ms);
         this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
         this.parsed_page_html = parse(this.page_html);
 
