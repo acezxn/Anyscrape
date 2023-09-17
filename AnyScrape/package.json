@@ -1,7 +1,7 @@
 {
   "name": "anyscrape",
   "version": "1.0.0",
-  "description": "Scrape anything",
+  "description": "Scrape any public data with ease",
   "main": "index.js",
   "scripts": {
     "start" : "node index.js"
