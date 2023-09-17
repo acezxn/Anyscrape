@@ -34,12 +34,15 @@ export default class Scraper {
         this.page = await this.browser.newPage();
         await this.page.goto(url, { waitUntil: "domcontentloaded" });
     }
-    async set_configuration(filename) {
+    async load_config_file(filename) {
         const config = JSON.parse(
             await readFile(
                 new URL(filename, import.meta.url)
             )
         );
+        this.config = config;
+    }
+    async load_config(config) {
         this.config = config;
     }
 
@@ -167,9 +170,9 @@ export default class Scraper {
      * @param {*} delay_ms millisecond delay before grabbing html
      * @memberof Scraper
      */
-    async scrape(url, delay_ms) {
+    async scrape(url) {
         await this.goto(url);
-        await sleep(delay_ms);
+        await sleep(parseInt(this.config.scrape_delay));
         this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
         this.parsed_page_html = parse(this.page_html);
 
@@ -187,9 +190,6 @@ export default class Scraper {
         }
         this.selected_elements = this.filter_by_attribute(this.selected_elements);
 
-        // scraped elements
-        for (let element of this.selected_elements) {
-            console.log(element.toString());
-        }
+        return this.selected_elements;
     }
 }
