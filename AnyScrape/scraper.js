@@ -1,12 +1,10 @@
-import { parse } from 'node-html-parser';
-import { readFile } from 'fs/promises';
-import puppeteer from 'puppeteer';
-import { ConeGeometry } from 'three';
+const parser = require("node-html-parser");
+const puppeteer = require("puppeteer")
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-export default class Scraper {
+class Scraper {
     constructor(url) {
         this.browser = null;
         this.page = null;
@@ -35,11 +33,7 @@ export default class Scraper {
         await this.page.goto(url, { waitUntil: "domcontentloaded" });
     }
     async load_config_file(filename) {
-        const config = JSON.parse(
-            await readFile(
-                new URL(filename, import.meta.url)
-            )
-        );
+        const config = require(filename);
         this.config = config;
     }
     async load_config(config) {
@@ -49,8 +43,8 @@ export default class Scraper {
     /**
      * Filters out elements by attributes listed in configuration
      *
-     * @param {parse.HTMLElement[]} elements_array element array to be filtered
-     * @returns {parse.HTMLElement[]} filtered element array
+     * @param {parser.parse.HTMLElement[]} elements_array element array to be filtered
+     * @returns {parser.parse.HTMLElement[]} filtered element array
      * @memberof Scraper
      */
     filter_by_attribute(elements_array) {
@@ -61,7 +55,7 @@ export default class Scraper {
             let element_id = "";
             let element_type = "";
 
-            if (element instanceof parse.HTMLElement) {
+            if (element instanceof parser.parse.HTMLElement) {
                 // filter out elements with name unmatch
                 if (this.config.tag_name !== "") {
                     element_name = element.rawTagName;
@@ -99,7 +93,7 @@ export default class Scraper {
     /**
      * Filter the page's html with location
      *
-     * @returns {parse.HTMLElement[]}  
+     * @returns {parser.parse.HTMLElement[]}  
      * @memberof Scraper filtered element array
      */
     filter_by_location() {
@@ -174,7 +168,7 @@ export default class Scraper {
         await this.goto(url);
         await sleep(parseInt(this.config.scrape_delay));
         this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
-        this.parsed_page_html = parse(this.page_html);
+        this.parsed_page_html = parser.parse(this.page_html);
 
         var tag_query = "*";
         this.selected_elements = [];
@@ -186,10 +180,12 @@ export default class Scraper {
             if (this.config.tag_name !== "") {
                 tag_query = this.config.tag_name;
             }
-            this.selected_elements = this.parsed_page_html.getElementsByTagName(this.config.tag_name);
+            this.selected_elements = this.parser.parsed_page_html.getElementsByTagName(this.config.tag_name);
         }
         this.selected_elements = this.filter_by_attribute(this.selected_elements);
 
         return this.selected_elements;
     }
 }
+
+module.exports = {Scraper}
