@@ -15,34 +15,53 @@
         <textarea id="tag_html_display" readonly>
         </textarea> 
         <br />
+        <h3>Filter settings:</h3>
         <label>Tag:</label>
         <input type="text" id="tag_name_input">
         <input type="checkbox" id="tag_name_enable">
         <small>Enable</small>
         <br />
+        <div class="separator"></div>
+
         <label>Class:</label>
         <input type="text" id="tag_class_input">
         <input type="checkbox" id="tag_class_enable">
         <small>Enable</small>
         <br />
+        <div class="separator"></div>
+
         <label>ID:</label>
         <input type="text" id="tag_id_input">
         <input type="checkbox" id="tag_id_enable">
         <small>Enable</small>
         <br />
+        <div class="separator"></div>
+
         <label>Type:</label>
         <input type="text" id="tag_type_input">
         <input type="checkbox" id="tag_type_enable">
         <small>Enable</small>
         <br />
+        <div class="separator"></div>
+
         <label>Location:</label>
         <input type="text" id="tag_location_input">
         <input type="checkbox" id="tag_location_enable">
         <small>Enable</small>
         <br />
-
+        <small>Note: the numbers can be changed to simple linear equations (Mx+b)</small>
+        <br />
+        <h3>Scrape settings:</h3>
+        <label>Delay before scrape:</label>
+        <input type="text" id="scrape_delay_input">
+        <br />
+        <button id="test_button">Test</button>
         <a class="button" id="export_button" href="data:application/xml;charset=utf-8,your code here" download="element_data.json">Export</a>
         <br />
+        <div class="separator"></div>
+        <label>Test results:</label>
+        <textarea id="test_result_display" readonly>
+        </textarea> 
         <script src="../windows/renderer.js"></script>
     </body>
 </html>

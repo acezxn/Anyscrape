@@ -11,6 +11,11 @@ const menu_template = {
             accelerator: 'CommandOrControl+V',
             role: 'paste',
         },
+        {
+            label: 'Select All',
+            accelerator: 'CommandOrControl+A',
+            role: 'selectall',
+        },
     ]
 };
 

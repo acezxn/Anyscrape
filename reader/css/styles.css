@@ -4,7 +4,8 @@
     --widget_hover_color: rgb(100, 100, 100);
     --foreground_color: white;
     --accent-color: rgb(255, 0, 0);
-    --border_color: rgb(100, 100, 100);
+    --button_border_color: rgb(204, 204, 204);
+    --text_border_color: rgb(146, 146, 146);
     --standard_font: system-ui;
 
     --monospace_font: 'Courier New', Courier, monospace;
@@ -37,17 +38,23 @@ textarea {
     margin-left: auto;
     margin-right: auto;
     color: var(--foreground_color);
-    background-color: var(--background_color);
+    background-color: var(--widget_color);
     font-family: var(--monospace_font);
-    border: solid 1px var(--border_color);
+    border: solid 1px transparent;
     border-radius: 5px;
+}
+
+div[class="separator"] {
+    display: block;
+    height: 1vh;
 }
 
 input[type="text"] {
     color: var(--foreground_color);
-    background-color: var(--background_color);
-    padding: 5px 5px;
-    border: 1px solid var(--border_color);
+    background-color: var(--widget_color);
+    padding: .2rem .2rem;
+    border-radius: .2rem;
+    border: 1px solid transparent;
     font-family: var(--monospace_font);
     width: 45vw;
 }
@@ -55,35 +62,38 @@ input[type="text"] {
 input[type="checkbox"] {
     display: inline-block;
     accent-color: var(--accent-color);
-    border: 1px solid var(--border_color);
+    border: 1px solid var(--button_border_color);
 }
 
-a[class="button"] {
-    display: inline-block;
-    text-decoration: none;
-    color: var(--foreground_color);
+a[class="button"], button {
     background-color: var(--widget_color);
-    border: 1px solid var(--border_color);
-    border-radius: 5px;
+    border: 1px solid var(--button_border_color);
+    border-radius: .5rem;
+    box-sizing: border-box;
+    color: var(--foreground_color);
     font-family: var(--standard_font);
-    padding: 5px 5px;
+    font-weight: 600;
+    line-height: 1.25rem;
+    padding: .18rem .5rem;
+    text-align: center;
+    text-decoration: none #D1D5DB solid;
+    text-decoration-thickness: auto;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
-a[class="button"]:hover {
+a[class="button"]:hover, button:hover {
     background-color: var(--widget_hover_color);
 }
 
-button {
-    display: inline-block;
-    text-decoration: none;
-    color: var(--foreground_color);
-    background-color: var(--widget_color);
-    border: 1px solid var(--border_color);
-    border-radius: 5px;
-    font-family: var(--standard_font);
-    padding: 5px 5px;
+a[class="button"]:focus, button:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
 }
 
-button:hover {
-    background-color: var(--widget_hover_color);
+a[class="button"]:focus-visible, button:focus-visible {
+    box-shadow: none;
 }

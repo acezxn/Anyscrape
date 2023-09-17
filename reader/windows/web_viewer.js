@@ -1,7 +1,7 @@
-const electron = require('electron');
-const electronLocalshortcut = require('electron-localshortcut');
-const path = require('node:path');
-const { WindowManager } = require('../window_manager');
+const electron = require("electron");
+const electronLocalshortcut = require("electron-localshortcut");
+const path = require("node:path");
+const { WindowManager } = require("../window_manager");
 const { menu_template } = require("../constants/menu_template")
 
 var ipc = electron.ipcMain;
@@ -43,7 +43,6 @@ const webViewer = () => {
         let backend_node_id = backend_node.backendNodeId;
         let resolved_node = await debug.sendCommand("DOM.resolveNode", { backendNodeId: backend_node_id });
         let html = await debug.sendCommand("DOM.getOuterHTML", { backendNodeId: backend_node_id });
-
         send_page_html();
         window.webContents.executeJavaScript("window.electronAPI.sendSelectedHTML(\`" + html.outerHTML + "\`);")
             .catch(function (e) {
