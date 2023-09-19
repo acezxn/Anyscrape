@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-        <title>Manual</title>
-        <link rel="stylesheet" href="../css/styles.css">
-    </head>
-    <body>
-        <h1>Welcome to Anyscrape manual</h1>
-        <h2>Quick guide:</h2>
-        <p>Search website on the searchbar</p>
-        <h3>Location</h3>
-        <p>
-            The format of the location string follows 0.0.0.0.0
-            <br />
-            Note: you can change the numbers to simple linear equations
-            (in the form of Mx+b, only + and - are supported). the x variable 
-            will be incremented from zero one by one
-            and check the html elements. 
-        </p>
-    </body>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Manual</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <h1>Welcome to Anyscrape Reader manual</h1>
+    <p>
+        The first step to write a typical web scraper is to identify which element to scrape. As a result, an immense
+        amount of work is done to research the structure of the web. Even worse, some websites have dynamically changing
+        information on html elements. The application is designed to automatically get information of the html element
+        pointed by the cursor and export it to a json file for the Anyscrape library.
+    </p>
+    <h2>Quick guide:</h2>
+    <h3>Website navigation</h3>
+    <p>
+        Websites can be searched with the search bar at the top. After
+        the search button is clicked, a web viewer would open up to show the website.
+        If the web viewer is closed, press search again to reopen.
+    </p>
+    <h3>HTML element selection</h3>
+    <p>
+        Hover the mouse on the html element, and hit F12. The Anyscrape Reader would 
+        automatically generate the filters for the element.
+    </p>
+    <h3>Filters</h3>
+    <p>
+        The types of filters include tag name, tag id, tag class, tag type, and location. 
+        By selecting "enable" beside the input boxes, this configures Anyscrape to filter
+        html elements based on the enabled filters.
+    </p>
+    <h4>Location</h4>
+    <p>
+        The format of the location string follows 0.0.0.0.0 ...<br />
+        The leftmost number is the index of the root element, and
+        the second leftmost number is the index of the root's child element.
+        This pattern applies to every numbers in the location string.
+        <br />
+        Note: you can change the numbers to simple linear equations
+        (in the form of Mx+B, only + and - are supported). the x variable
+        will be incremented from zero one by one
+        and check the html elements.
+        <br />
+        For example, you can have 0.x.1.2x+1.1 as the location string.
+    </p>
+</body>
+
 </html>

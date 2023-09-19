@@ -1,3 +1,9 @@
+/**
+ * Sleep in ms
+ *
+ * @param {*} ms
+ * @return {*} 
+ */
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

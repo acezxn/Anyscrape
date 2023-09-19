@@ -10,7 +10,15 @@ var ipc = electron.ipcMain;
  * The web viewer UI
  *
  */
-const webViewer = () => {
+const webViewer = (url) => {
+    if (WindowManager.web_viewer_window !== null) {
+        if (url !== undefined) {
+            WindowManager.web_viewer_window.loadURL(url);
+        } else {
+            WindowManager.web_viewer_window.loadFile("./html/manual.html");
+        }
+        return;
+    }
     var menu = electron.Menu.buildFromTemplate([
         menu_template
     ]);
@@ -35,7 +43,7 @@ const webViewer = () => {
         debug.attach();
     }
 
-    async function dev_tools_func(x, y) {
+    async function get_selected_html(x, y) {
         await reattach_debugger();
         await window.webContents.executeJavaScript("document.documentElement.scrollTop");
         let scrollTop = await window.webContents.executeJavaScript("document.documentElement.scrollTop");
@@ -57,17 +65,13 @@ const webViewer = () => {
             });
     }
 
-    // on receiving search url
-    ipc.on('search_url', (event, url) => {
-        window.loadURL(url);
-    });
     // disable open new window
     window.webContents.setWindowOpenHandler(() => {
         return { action: "deny" };
     });
     // delete window when closed
     window.on("closed", () => {
-        WindowManager.windows.delete(window);
+        WindowManager.web_viewer_window = null;
         window = null;
     });
 
@@ -77,17 +81,20 @@ const webViewer = () => {
         let bounds = window.getContentBounds();
         let x = mouse_position.x - bounds.x;
         let y = mouse_position.y - bounds.y;
-        dev_tools_func(x, y)
+        get_selected_html(x, y)
             .catch(function (e) {
                 console.log("Promise Rejected: ", e);
             });
     });
 
     electron.Menu.setApplicationMenu(menu);
-    window.loadFile("./html/manual.html");
-
+    if (url !== undefined) {
+        window.loadURL(url);
+    } else {
+        window.loadFile("./html/manual.html");
+    }
     // window.webContents.toggleDevTools();
-    WindowManager.windows.add(window);
+    WindowManager.web_viewer_window = window;
 }
 
 

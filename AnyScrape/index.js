@@ -25,6 +25,12 @@ class Scraper {
             console.log("Browser creation failed => : ", err);
         }
     }
+    /**
+     * Go to a specific url
+     *
+     * @param {*} url url to go to
+     * @memberof Scraper
+     */
     async goto(url) {
         this.page = await this.browser.newPage();
         await this.page.goto(url, { waitUntil: "domcontentloaded" });
@@ -142,7 +148,7 @@ class Scraper {
                 }
 
                 for (let index = Math.max(Math.min(offset, root.childNodes.length - 1), 0);
-                    index < root.childNodes.length; index += multiplier) {
+                    index >= 0 && index < root.childNodes.length; index += multiplier) {
                     search(root.childNodes[index], depth + 1);
                 }
                 return;
@@ -158,7 +164,6 @@ class Scraper {
      * Scrape the url
      *
      * @param {*} url url to scrape
-     * @param {*} delay_ms millisecond delay before grabbing html
      * @memberof Scraper
      */
     async scrape(url) {
@@ -173,16 +178,18 @@ class Scraper {
         if (this.config.tag_location !== "") {
             this.selected_elements = this.filter_by_location();
         } else {
-            // filter by tag name
             if (this.config.tag_name !== "") {
                 tag_query = this.config.tag_name;
             }
-            this.selected_elements = this.parser.parsed_page_html.getElementsByTagName(this.config.tag_name);
+            this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
         }
         this.selected_elements = this.filter_by_attribute(this.selected_elements);
 
+        for (let index = 0; index < this.selected_elements.length; index++) {
+            this.selected_elements[index] = this.selected_elements[index].toString();
+        }
         return this.selected_elements;
     }
 }
 
-module.exports = {Scraper}
+module.exports = { Scraper }

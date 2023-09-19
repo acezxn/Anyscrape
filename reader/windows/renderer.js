@@ -79,6 +79,10 @@ function gen_export_dict() {
     }
     return export_dict;
 }
+
+function open_manual() {
+    window.electronAPI.openManual();
+}
 /**
  * Handles export to json request
  *
@@ -122,6 +126,7 @@ function test_scrape() {
     document.getElementById("test_button").disabled = true;
 }
 
+document.getElementById("manual_button").addEventListener("click", open_manual);
 document.getElementById("export_button").addEventListener("click", handle_export);
 document.getElementById("search_button").addEventListener("click", send_search_url);
 document.getElementById("url_input").addEventListener("keypress", searchbar_keypress);

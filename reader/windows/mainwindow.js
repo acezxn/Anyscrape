@@ -4,6 +4,7 @@ const parser = require("node-html-parser");
 const path = require("node:path");
 const { Scraper } = require("anyscrape");
 const { get_node_depthstring } = require("../utils/utils.js");
+const { webViewer } = require("./web_viewer");
 
 var ipc = electron.ipcMain;
 
@@ -12,14 +13,19 @@ var ipc = electron.ipcMain;
  *
  */
 const mainWindow = () => {
+    if (WindowManager.mainwindow !== null) {
+        return;
+    }
+    
     var window = new electron.BrowserWindow({
-        width: 400,
-        height: 650,
+        width: 570,
+        height: 700,
         nodeIntegration: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         },
     });
+    var web_viewer = null;
     var debug = null;
     var raw_page_html = "";
     var raw_selected_html = null;
@@ -34,10 +40,18 @@ const mainWindow = () => {
 
     // delete window when closed
     window.on("closed", () => {
-        WindowManager.windows.delete(window);
+        WindowManager.mainwindow = null;
         window = null;
     });
 
+    // on receiving search url
+    ipc.on('open_manual', (event) => {
+        webViewer();
+    });
+    // on receiving search url
+    ipc.on('search_url', (event, url) => {
+        webViewer(url);
+    });
     // on receiving the document's html
     ipc.on('page_html', (event, content) => {
         raw_page_html = content;
@@ -95,9 +109,8 @@ const mainWindow = () => {
         window.webContents.send('element_data', tag_data);
     });
 
-
-    WindowManager.windows.add(window);
     window.loadFile("./html/anyscrape_reader.html");
     // window.webContents.toggleDevTools();
+    WindowManager.mainwindow = window;
 }
 module.exports = { mainWindow }

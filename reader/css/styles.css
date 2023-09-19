@@ -2,12 +2,15 @@
     --background_color: rgb(30, 30, 30);
     --widget_color: rgb(67, 67, 67);
     --widget_hover_color: rgb(100, 100, 100);
+    --widget_disabled_color: rgb(195, 195, 195);
     --foreground_color: white;
     --accent-color: rgb(255, 0, 0);
     --button_border_color: rgb(204, 204, 204);
     --text_border_color: rgb(146, 146, 146);
-    --standard_font: system-ui;
 
+    --title-font: Arial, Helvetica, sans-serif;
+    --paragraph-font: 'Verdana';
+    --standard_font: system-ui;
     --monospace_font: 'Courier New', Courier, monospace;
 
     --standard_fontsize: 14px;
@@ -21,6 +24,26 @@ body {
     font-family: var(--standard_font);
 }
 
+h1 {
+    font-size: min(40px, max(4vw, 30px));
+    font-family: var(--title-font);
+}
+h2 {
+    font-size: min(30px, max(3vw, 20px));
+    font-family: var(--title-font);
+}
+h3 {
+    font-size: min(25px, max(2vw, 15px));
+    font-family: var(--title-font);
+}
+h4 {
+    font-size: min(23px, max(2vw, 13px));
+    font-family: var(--title-font);
+}
+p {
+    font-size: min(16px, max(2vw, 10px));
+    font-family: var(--paragraph-font);
+}
 label {
     display: inline-block;
     width: 30vw;
@@ -88,6 +111,11 @@ a[class="button"], button {
 a[class="button"]:hover, button:hover {
     background-color: var(--widget_hover_color);
 }
+
+a[class="button"]:disabled, button:disabled {
+    background-color: var(--widget_disabled_color);
+}
+
 
 a[class="button"]:focus, button:focus {
     outline: 2px solid transparent;

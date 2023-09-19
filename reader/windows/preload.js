@@ -4,6 +4,8 @@ const { webFrame } = require("electron")
 webFrame.setZoomFactor(1);
 
 contextBridge.exposeInMainWorld('electronAPI', {
+    openManual: () => ipcRenderer.send('open_manual'),
+    // send search url
     searchURL: (url) => ipcRenderer.send('search_url', url),
     // get html from webpage
     sendPageHTML: (content) => ipcRenderer.send('page_html', content),
