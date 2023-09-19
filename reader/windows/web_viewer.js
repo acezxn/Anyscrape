@@ -93,7 +93,6 @@ const webViewer = (url) => {
     } else {
         window.loadFile("./html/manual.html");
     }
-    // window.webContents.toggleDevTools();
     WindowManager.web_viewer_window = window;
 }
 

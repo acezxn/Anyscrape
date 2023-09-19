@@ -53,42 +53,21 @@ class Scraper {
     filter_by_attribute(elements_array) {
         let tmp_elements = [];
         for (let element of elements_array) {
-            let element_name = ""
-            let element_class = "";
-            let element_id = "";
-            let element_type = "";
-
-            if (element instanceof parser.parse.HTMLElement) {
-                // filter out elements with name unmatch
-                if (this.config.tag_name !== "") {
-                    element_name = element.rawTagName;
-                    if (element_name !== this.config.tag_name) {
-                        continue;
-                    }
-                }
-                // filter out elements with class unmatch
-                if (this.config.tag_class !== "") {
-                    element_class = element.getAttribute("class");
-                    if (element_class !== this.config.tag_class) {
-                        continue;
-                    }
-                }
-                // filter out elements with id unmatch
-                if (this.config.tag_id !== "") {
-                    element_id = element.getAttribute("id");
-                    if (element_id !== this.config.tag_id) {
-                        continue;
-                    }
-                }
-                // filter out elements with type unmatch
-                if (this.config.tag_type !== "") {
-                    element_type = element.getAttribute("type");
-                    if (element_type !== this.config.tag_type) {
-                        continue;
-                    }
+            let match = true;
+            for (let [key, value] of Object.entries(this.config)) {
+                let attr_key = key.replace("_filter", "");
+                console.log(attr_key);
+                if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
+                    attr_key !== "scrape_delay" &&
+                    value !== "" &&
+                    element.attributes[attr_key] != value) {
+                    match = false;
+                    break;
                 }
             }
-            tmp_elements.push(element);
+            if (match) {
+                tmp_elements.push(element);
+            }
         }
         return tmp_elements;
     }
@@ -101,7 +80,7 @@ class Scraper {
      */
     filter_by_location() {
         var tmp_elements = [];
-        var parsed_location = this.config.tag_location.split(".");
+        var parsed_location = this.config.tag_location_filter.split(".");
 
         function search(root, depth = 0) {
             if (root === undefined) {
@@ -175,15 +154,17 @@ class Scraper {
         var tag_query = "*";
         this.selected_elements = [];
 
-        if (this.config.tag_location !== "") {
+        if ("tag_location_filter" in this.config && this.config.tag_location_filter !== "") {
             this.selected_elements = this.filter_by_location();
         } else {
-            if (this.config.tag_name !== "") {
-                tag_query = this.config.tag_name;
+            if ("tag_name_filter" in this.config && this.config.tag_name_filter !== "") {
+                tag_query = this.config.tag_name_filter;
             }
             this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
         }
+
         this.selected_elements = this.filter_by_attribute(this.selected_elements);
+        console.log(this.selected_elements);
 
         for (let index = 0; index < this.selected_elements.length; index++) {
             this.selected_elements[index] = this.selected_elements[index].toString();

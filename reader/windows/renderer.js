@@ -1,31 +1,84 @@
 
-window.electronAPI.handleElementData((event, data) => {
-    const tag_name_input        = document.getElementById("tag_name_input");
-    const tag_html_display      = document.getElementById("tag_html_display");
-    const tag_class_input       = document.getElementById("tag_class_input");
-    const tag_id_input          = document.getElementById("tag_id_input");
-    const tag_type_input        = document.getElementById("tag_type_input");
-    const tag_location_input    = document.getElementById("tag_location_input");
+window.electronAPI.handleElementData((event, tag_data) => {
+    const filter_settings = document.getElementById("filter_settings");
+    const tag_html_display = document.getElementById("tag_html_display");
 
-    const tag_name_enable       = document.getElementById("tag_name_enable");
-    const tag_class_enable      = document.getElementById("tag_class_enable");
-    const tag_id_enable         = document.getElementById("tag_id_enable");
-    const tag_type_enable       = document.getElementById("tag_type_enable");
-    const tag_location_enable   = document.getElementById("tag_location_enable");
+    filter_settings.innerHTML = "";
+    tag_html_display.value = tag_data.html;
 
+    let tag_name_label = document.createElement("label");
+    let tag_name_input = document.createElement("input");
+    let tag_name_checkbox = document.createElement("input");
+    let tag_name_checkbox_label = document.createElement("small");
+    let tag_name_new_line = document.createElement("br");
+    let tag_name_separator = document.createElement("div");
 
-    tag_html_display.value      = data.tag_html;
-    tag_name_input.value        = data.tag_name;
-    tag_class_input.value       = data.tag_class;
-    tag_id_input.value          = data.tag_id;
-    tag_type_input.value        = data.tag_type;
-    tag_location_input.value    = data.tag_location;
+    let tag_location_label = document.createElement("label");
+    let tag_location_input = document.createElement("input");
+    let tag_location_checkbox = document.createElement("input");
+    let tag_location_checkbox_label = document.createElement("small");
+    let tag_location_new_line = document.createElement("br");
+    let tag_location_separator = document.createElement("div");
 
-    tag_name_enable.checked     = data.tag_name !== "";
-    tag_class_enable.checked    = data.tag_class !== "";
-    tag_id_enable.checked       = data.tag_id !== "";
-    tag_type_enable.checked     =  data.tag_type !== "";
-    tag_location_enable.checked = data.tag_location !== "";
+    tag_name_label.innerHTML = "Tag name:";
+    tag_name_input.type = "text";
+    tag_name_input.id = "tag_name_filter";
+    tag_name_input.value = tag_data.tag_name;
+    tag_name_checkbox.checked = true;
+    tag_name_checkbox.type = "checkbox";
+    tag_name_checkbox.id = "tag_name_enable";
+    tag_name_checkbox_label.innerHTML = "Enable";
+    tag_name_separator.className = "separator";
+
+    tag_location_label.innerHTML = "Tag location:";
+    tag_location_input.type = "text";
+    tag_location_input.id = "tag_location_filter";
+    tag_location_input.value = tag_data.location;
+    tag_location_checkbox.checked = tag_data.location !== "";
+    tag_location_checkbox.type = "checkbox";
+    tag_location_checkbox.id = "tag_location_enable";
+    tag_location_checkbox_label.innerHTML = "Enable";
+    tag_location_separator.className = "separator";
+
+    filter_settings.appendChild(tag_name_label);
+    filter_settings.appendChild(tag_name_input);
+    filter_settings.appendChild(tag_name_checkbox);
+    filter_settings.appendChild(tag_name_checkbox_label);
+    filter_settings.appendChild(tag_name_new_line);
+    filter_settings.appendChild(tag_name_separator);
+
+    for (const [attr, value] of Object.entries(tag_data.attributes)) {
+        let attr_label = document.createElement("label");
+        let attr_input = document.createElement("input");
+        let attr_checkbox = document.createElement("input");
+        let checkbox_label = document.createElement("small");
+        let new_line = document.createElement("br");
+        let separator = document.createElement("div");
+
+        attr_label.innerHTML = attr;
+        attr_input.type = "text";
+        attr_input.id = attr + "_filter";
+        attr_input.value = value;
+        attr_checkbox.checked = true;
+        attr_checkbox.type = "checkbox";
+        attr_checkbox.id = attr + "_enable";
+        checkbox_label.innerHTML = "Enable";
+        separator.className = "separator";
+
+        filter_settings.appendChild(attr_label);
+        filter_settings.appendChild(attr_input);
+        filter_settings.appendChild(attr_checkbox);
+        filter_settings.appendChild(checkbox_label);
+        filter_settings.appendChild(new_line);
+        filter_settings.appendChild(separator);
+    }
+
+    filter_settings.appendChild(tag_location_label);
+    filter_settings.appendChild(tag_location_input);
+    filter_settings.appendChild(tag_location_checkbox);
+    filter_settings.appendChild(tag_location_checkbox_label);
+    filter_settings.appendChild(tag_location_new_line);
+    filter_settings.appendChild(tag_location_separator);
 });
 
 window.electronAPI.handleTestResult((event, data) => {
@@ -40,42 +93,25 @@ window.electronAPI.handleTestResult((event, data) => {
  * @returns {*} export dictionary
  */
 function gen_export_dict() {
-    const tag_name_enable       = document.getElementById("tag_name_enable");
-    const tag_class_enable      = document.getElementById("tag_class_enable");
-    const tag_id_enable         = document.getElementById("tag_id_enable");
-    const tag_type_enable       = document.getElementById("tag_type_enable");
-    const tag_location_enable   = document.getElementById("tag_location_enable");
-    const scrape_delay_input    = document.getElementById("scrape_delay_input");
+    const filter_settings = document.getElementById("filter_settings");
+    const scrape_delay = document.getElementById("scrape_delay_input");
 
     var export_dict = {
-        tag_html     : "",
-        tag_name     : "",
-        tag_class    : "",
-        tag_id       : "",
-        tag_type     : "",
-        tag_location : "",
-        scrape_delay : "0",
     };
 
-    export_dict.tag_html = tag_html_display.value;
+    for (let child of filter_settings.childNodes) {
+        if (child.tagName === "INPUT") {
+            if (child.type === "text") {
+                export_dict[child.id] = child.value;
+            }
+            else if (child.type === "checkbox" && !child.checked) {
+                export_dict[child.id.replace("_enable", "_filter")] = "";
+            }
+        }
+    }
 
-    if (tag_name_enable.checked) {
-        export_dict.tag_name = tag_name_input.value;
-    }
-    if (tag_class_enable.checked) {
-        export_dict.tag_class = tag_class_input.value;
-    }
-    if (tag_id_enable.checked) {
-        export_dict.tag_id = tag_id_input.value;
-    }
-    if (tag_type_enable.checked) {
-        export_dict.tag_type = tag_type_input.value;
-    }
-    if (tag_location_enable.checked) {
-        export_dict.tag_location = tag_location_input.value;
-    }
-    if (scrape_delay_input.value !== "" && /^[0-9]*$/.test(scrape_delay_input.value)) {
-        export_dict.scrape_delay = +scrape_delay_input.value;
+    if (/^[0-9]*$/.test(scrape_delay.value)) {
+        export_dict["scrape_delay"] = +scrape_delay.value;
     }
     return export_dict;
 }
@@ -90,7 +126,6 @@ function open_manual() {
 function handle_export() {
     let export_button = document.getElementById("export_button");
     export_button.href = "data:application/xml;charset=utf-8," + JSON.stringify(gen_export_dict());
-    console.log("export");
 }
 
 /**
