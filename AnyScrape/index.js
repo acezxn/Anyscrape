@@ -1,6 +1,6 @@
 const parser = require("node-html-parser");
 const puppeteer = require("puppeteer");
-const { sleep } = require("./utils/utils.js");
+const { sleep, equalSet } = require("./utils/utils.js");
 class Scraper {
     constructor(url) {
         this.browser = null;
@@ -32,8 +32,12 @@ class Scraper {
      * @memberof Scraper
      */
     async goto(url) {
-        this.page = await this.browser.newPage();
-        await this.page.goto(url, { waitUntil: "domcontentloaded" });
+        try {
+            this.page = await this.browser.newPage();
+            await this.page.goto(url, { waitUntil: "domcontentloaded" });
+        } catch (e) {
+            throw e;
+        }
     }
     async load_config_file(filename) {
         const config = require(filename);
@@ -62,9 +66,21 @@ class Scraper {
                 if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
                     attr_key !== "scrape_delay" &&
                     value !== "" &&
-                    element.attributes[attr_key] != value) {
-                    match = false;
-                    break;
+                    element.attributes[attr_key] !== undefined &&
+                    element.attributes[attr_key] !== value) {
+
+                    if (attr_key === "class") {
+                        let actual_class_set = new Set(element.attributes[attr_key].split(" "));
+                        let expected_class_set = new Set(value.split(" "));
+
+                        if (!equalSet(actual_class_set, expected_class_set)) {
+                            match = false;
+                            break;
+                        }
+                    } else {
+                        match = false;
+                        break;
+                    }
                 }
             }
             if (match) {
@@ -148,29 +164,33 @@ class Scraper {
      * @memberof Scraper
      */
     async scrape(url) {
-        await this.goto(url);
-        await sleep(parseInt(this.config.scrape_delay));
-        this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
-        this.parsed_page_html = parser.parse(this.page_html);
+        try {
+            await this.goto(url);
+            await sleep(parseInt(this.config.scrape_delay));
+            this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
+            this.parsed_page_html = parser.parse(this.page_html);
 
-        var tag_query = "*";
-        this.selected_elements = [];
+            var tag_query = "*";
+            this.selected_elements = [];
 
-        if ("tag_location_filter" in this.config && this.config.tag_location_filter !== "") {
-            this.selected_elements = this.filter_by_location();
-        } else {
-            if ("tag_name_filter" in this.config && this.config.tag_name_filter !== "") {
-                tag_query = this.config.tag_name_filter;
+            if ("tag_location_filter" in this.config && this.config.tag_location_filter !== "") {
+                this.selected_elements = this.filter_by_location();
+            } else {
+                if ("tag_name_filter" in this.config && this.config.tag_name_filter !== "") {
+                    tag_query = this.config.tag_name_filter;
+                }
+                this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
             }
-            this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
-        }
 
-        this.selected_elements = this.filter_by_attribute(this.selected_elements);
+            this.selected_elements = this.filter_by_attribute(this.selected_elements);
 
-        for (let index = 0; index < this.selected_elements.length; index++) {
-            this.selected_elements[index] = this.selected_elements[index].toString();
+            for (let index = 0; index < this.selected_elements.length; index++) {
+                this.selected_elements[index] = this.selected_elements[index].toString();
+            }
+            return this.selected_elements;
+        } catch (e) {
+            throw e;
         }
-        return this.selected_elements;
     }
 }
 
