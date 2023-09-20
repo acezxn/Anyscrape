@@ -46,17 +46,19 @@ class Scraper {
     /**
      * Filters out elements by attributes listed in configuration
      *
-     * @param {parser.parse.HTMLElement[]} elements_array element array to be filtered
-     * @returns {parser.parse.HTMLElement[]} filtered element array
+     * @param {parser.HTMLElement[]} elements_array element array to be filtered
+     * @returns {parser.HTMLElement[]} filtered element array
      * @memberof Scraper
      */
     filter_by_attribute(elements_array) {
         let tmp_elements = [];
         for (let element of elements_array) {
+            if (!(element instanceof parser.HTMLElement)) {
+                continue;
+            }
             let match = true;
             for (let [key, value] of Object.entries(this.config)) {
                 let attr_key = key.replace("_filter", "");
-                console.log(attr_key);
                 if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
                     attr_key !== "scrape_delay" &&
                     value !== "" &&
@@ -75,7 +77,7 @@ class Scraper {
     /**
      * Filter the page's html with location
      *
-     * @returns {parser.parse.HTMLElement[]}  
+     * @returns {parser.HTMLElement[]}  
      * @memberof Scraper filtered element array
      */
     filter_by_location() {
@@ -164,7 +166,6 @@ class Scraper {
         }
 
         this.selected_elements = this.filter_by_attribute(this.selected_elements);
-        console.log(this.selected_elements);
 
         for (let index = 0; index < this.selected_elements.length; index++) {
             this.selected_elements[index] = this.selected_elements[index].toString();
