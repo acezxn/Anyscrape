@@ -1,7 +1,7 @@
 {
   "name": "anyscrape_reader",
   "version": "1.0.0",
-  "description": "read any element on a webpage and export it as a json",
+  "description": "Read any element on a webpage and export it as a json configuration file",
   "main": "index.js",
   "scripts": {
     "start": "electron ."
