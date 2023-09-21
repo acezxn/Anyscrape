@@ -13,7 +13,7 @@ async function fetch_news() {
     console.log("Headlines from nbcnews: \n");
     for (let element of selected_elements) {
         let parsed = parser.parse(element);
-        console.log(parsed.textContent + "\n");
+        console.log('\x1b[36m%s\x1b[0m', parsed.textContent + "\n");
     }
 }
 

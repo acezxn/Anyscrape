@@ -19,7 +19,7 @@ class Scraper {
     async init() {
         try {
             this.browser = await puppeteer.launch({
-                headless: true,
+                headless: "new",
             });
         } catch (err) {
             console.log("Browser creation failed => : ", err);
