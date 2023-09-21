@@ -82,6 +82,12 @@ class Scraper {
                         break;
                     }
                 }
+                else if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
+                    attr_key !== "scrape_delay" &&
+                    element.attributes[attr_key] === undefined) {
+                    match = false;
+                    break;
+                }
             }
             if (match) {
                 tmp_elements.push(element);
