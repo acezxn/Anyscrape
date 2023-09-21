@@ -28,7 +28,7 @@ class Scraper {
     /**
      * Go to a specific url
      *
-     * @param {*} url url to go to
+     * @param {String} url url to go to
      * @memberof Scraper
      */
     async goto(url) {
@@ -39,10 +39,51 @@ class Scraper {
             throw e;
         }
     }
+    /**
+     * Runs a query selector and click on the
+     * first selected element
+     * 
+     * @param {String} selector CSS selector
+     * @memberof Scraper
+     */
+    async click_element(selector) {
+        await page.waitForSelector(selector);
+        let form = await page.$(selector);
+
+        await form.evaluate(form => form.click());
+    }
+
+    /**
+     * Runs a query selector and type on the
+     * first selected element
+     * 
+     * @param {Strihg} selector CSS selector
+     * @param {Strihg} text text to type in
+     * @memberof Scraper
+     */
+    async type_on_element(selector, text) {
+        await page.waitForSelector(selector);
+        let form = await page.$(selector);
+
+        await form.evaluate(form => form.type());
+    }
+
+    /**
+     * Loads configuration from json
+     *
+     * @param {String} filename file name
+     * @memberof Scraper
+     */
     async load_config_file(filename) {
         const config = require(filename);
         this.config = config;
     }
+    /**
+     * Loads configuration from dictionary
+     *
+     * @param {Object.<String, String>} config config dictionary
+     * @memberof Scraper
+     */
     async load_config(config) {
         this.config = config;
     }
@@ -54,7 +95,7 @@ class Scraper {
      * @returns {parser.HTMLElement[]} filtered element array
      * @memberof Scraper
      */
-    filter_by_attribute(elements_array) {
+    #filter_by_attribute(elements_array) {
         let tmp_elements = [];
         for (let element of elements_array) {
             if (!(element instanceof parser.HTMLElement)) {
@@ -102,7 +143,7 @@ class Scraper {
      * @returns {parser.HTMLElement[]}  
      * @memberof Scraper filtered element array
      */
-    filter_by_location() {
+    #filter_by_location() {
         var tmp_elements = [];
         var parsed_location = this.config.tag_location_filter.split(".");
 
@@ -171,7 +212,9 @@ class Scraper {
      */
     async scrape(url) {
         try {
-            await this.goto(url);
+            if (url !== undefined && url !== "") {
+                await this.goto(url);
+            }
             await sleep(parseInt(this.config.scrape_delay));
             this.page_html = await this.page.evaluate(() => document.querySelector('body').innerHTML);
             this.parsed_page_html = parser.parse(this.page_html);
@@ -180,7 +223,7 @@ class Scraper {
             this.selected_elements = [];
 
             if ("tag_location_filter" in this.config && this.config.tag_location_filter !== "") {
-                this.selected_elements = this.filter_by_location();
+                this.selected_elements = this.#filter_by_location();
             } else {
                 if ("tag_name_filter" in this.config && this.config.tag_name_filter !== "") {
                     tag_query = this.config.tag_name_filter;
@@ -188,7 +231,7 @@ class Scraper {
                 this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
             }
 
-            this.selected_elements = this.filter_by_attribute(this.selected_elements);
+            this.selected_elements = this.#filter_by_attribute(this.selected_elements);
 
             for (let index = 0; index < this.selected_elements.length; index++) {
                 this.selected_elements[index] = this.selected_elements[index].toString();
