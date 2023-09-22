@@ -9,6 +9,7 @@
   "author": "acezxn",
   "license": "ISC",
   "dependencies": {
+    "anyscrape": "^1.0.3",
     "node-html-parser": "^6.1.10",
     "puppeteer": "^21.2.1"
   }
