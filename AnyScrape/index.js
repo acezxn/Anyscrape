@@ -47,10 +47,8 @@ class Scraper {
      * @memberof Scraper
      */
     async click_element(selector) {
-        await page.waitForSelector(selector);
-        let form = await page.$(selector);
-
-        await form.evaluate(form => form.click());
+        await this.page.waitForSelector(selector);
+        await this.page.click(selector);
     }
 
     /**
@@ -62,10 +60,8 @@ class Scraper {
      * @memberof Scraper
      */
     async type_on_element(selector, text) {
-        await page.waitForSelector(selector);
-        let form = await page.$(selector);
-
-        await form.evaluate(form => form.type());
+        await this.page.waitForSelector(selector);
+        await this.page.type(selector, text);
     }
 
     /**

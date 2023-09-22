@@ -12,6 +12,7 @@
     "electron": "^26.2.1"
   },
   "dependencies": {
+    "anyscrape": "^1.0.2",
     "electron-localshortcut": "^3.2.1",
     "node-html-parser": "^6.1.9"
   }

@@ -1,10 +1,10 @@
 {
   "name": "anyscrape",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Scrape any public data with ease",
   "main": "index.js",
   "scripts": {
-    "start" : "node index.js"
+    "start": "node index.js"
   },
   "author": "acezxn",
   "license": "ISC",
