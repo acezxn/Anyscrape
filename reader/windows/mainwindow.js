@@ -59,6 +59,10 @@ const mainWindow = () => {
         parsed_page_html = parser.parse(raw_page_html);
     });
 
+    ipc.on('cookie_data', (event, cookie_data) => {
+        window.webContents.send('cookie_data', cookie_data);
+    });
+
     ipc.on('test_content', (event, content, url) => {
         test_scrape(content, url)
     });

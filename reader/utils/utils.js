@@ -18,4 +18,11 @@ function get_node_depthstring(root, target, depthstring = "") {
     return depthstring;
 }
 
-module.exports = {get_node_depthstring};
+function get_domain_name(url) {
+    let domain = (new URL(url));
+    let domain_array = domain.hostname.split(".");
+
+    return "." + domain_array[domain_array.length-2] + "." + domain_array[domain_array.length-1];
+}
+
+module.exports = {get_node_depthstring, get_domain_name};

@@ -21,6 +21,7 @@ class Scraper {
             this.browser = await puppeteer.launch({
                 headless: "new",
             });
+            this.page = await this.browser.newPage();
         } catch (err) {
             console.log("Browser creation failed => : ", err);
         }
@@ -33,7 +34,6 @@ class Scraper {
      */
     async goto(url) {
         try {
-            this.page = await this.browser.newPage();
             await this.page.goto(url, { waitUntil: "domcontentloaded" });
         } catch (e) {
             throw e;
@@ -62,6 +62,16 @@ class Scraper {
     async type_on_element(selector, text) {
         await this.page.waitForSelector(selector);
         await this.page.type(selector, text);
+    }
+
+    /**
+     * Sets cookie for scraping
+     *
+     * @param {*} cookies list of cookies
+     * @memberof Scraper
+     */
+    async set_cookie(cookies) {
+        await this.page.setCookie(...cookies);
     }
 
     /**
@@ -98,10 +108,9 @@ class Scraper {
                 continue;
             }
             let match = true;
-            for (let [key, value] of Object.entries(this.config)) {
+            for (let [key, value] of Object.entries(this.config.filters)) {
                 let attr_key = key.replace("_filter", "");
                 if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
-                    attr_key !== "scrape_delay" &&
                     value !== "" &&
                     element.attributes[attr_key] !== undefined &&
                     element.attributes[attr_key] !== value) {
@@ -120,7 +129,6 @@ class Scraper {
                     }
                 }
                 else if (attr_key !== "tag_name" && attr_key !== "tag_location" &&
-                    attr_key !== "scrape_delay" &&
                     element.attributes[attr_key] === undefined) {
                     match = false;
                     break;
@@ -141,7 +149,7 @@ class Scraper {
      */
     #filter_by_location() {
         var tmp_elements = [];
-        var parsed_location = this.config.tag_location_filter.split(".");
+        var parsed_location = this.config.filters.tag_location_filter.split(".");
 
         function search(root, depth = 0) {
             if (root === undefined) {
@@ -203,11 +211,14 @@ class Scraper {
     /**
      * Scrape the url
      *
-     * @param {*} url url to scrape
+     * @param {String} url url to scrape
      * @memberof Scraper
      */
     async scrape(url) {
         try {
+            if ("cookies" in this.config) {
+                await this.set_cookie(this.config.cookies);
+            }
             if (url !== undefined && url !== "") {
                 await this.goto(url);
             }
@@ -218,11 +229,11 @@ class Scraper {
             var tag_query = "*";
             this.selected_elements = [];
 
-            if ("tag_location_filter" in this.config && this.config.tag_location_filter !== "") {
+            if ("tag_location_filter" in this.config.filters && this.config.filters.tag_location_filter !== "") {
                 this.selected_elements = this.#filter_by_location();
             } else {
-                if ("tag_name_filter" in this.config && this.config.tag_name_filter !== "") {
-                    tag_query = this.config.tag_name_filter;
+                if ("tag_name_filter" in this.config.filters && this.config.filters.tag_name_filter !== "") {
+                    tag_query = this.config.filters.tag_name_filter;
                 }
                 this.selected_elements = this.parsed_page_html.getElementsByTagName(tag_query);
             }

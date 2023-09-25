@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "anyscrape": "^1.0.3",
+    "anyscrape": "^1.0.5",
     "node-html-parser": "^6.1.10"
   }
 }

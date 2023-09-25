@@ -1,5 +1,5 @@
 
-window.electronAPI.handleElementData((event, tag_data) => {
+window.electronAPI.sendElementDataToRenderer((event, tag_data) => {
     const filter_settings = document.getElementById("filter_settings");
     const tag_html_display = document.getElementById("tag_html_display");
 
@@ -81,7 +81,15 @@ window.electronAPI.handleElementData((event, tag_data) => {
     filter_settings.appendChild(tag_location_separator);
 });
 
-window.electronAPI.handleTestResult((event, data) => {
+window.electronAPI.sendCookieDataToRenderer((event, cookie_data) => {
+    const cookies_display = document.getElementById("cookies_display");
+    let cookie_dict = {
+        cookies: cookie_data
+    };
+    cookies_display.value = JSON.stringify(cookie_dict, null, 4);
+});
+
+window.electronAPI.sendTestResultToRenderer((event, data) => {
     const test_result_display = document.getElementById("test_result_display");
     test_result_display.value = data;
     document.getElementById("test_button").disabled = false;
@@ -95,17 +103,20 @@ window.electronAPI.handleTestResult((event, data) => {
 function gen_export_dict() {
     const filter_settings = document.getElementById("filter_settings");
     const scrape_delay = document.getElementById("scrape_delay_input");
+    const cookies_display = document.getElementById("cookies_display");
+    const use_cookies_input = document.getElementById("use_cookies_input");
 
     var export_dict = {
+        filters: {}
     };
 
     for (let child of filter_settings.childNodes) {
         if (child.tagName === "INPUT") {
             if (child.type === "text") {
-                export_dict[child.id] = child.value;
+                export_dict.filters[child.id] = child.value;
             }
             else if (child.type === "checkbox" && !child.checked) {
-                export_dict[child.id.replace("_enable", "_filter")] = "";
+                delete export_dict.filters[child.id.replace("_enable", "_filter")];
             }
         }
     }
@@ -113,6 +124,11 @@ function gen_export_dict() {
     if (/^[0-9]*$/.test(scrape_delay.value)) {
         export_dict["scrape_delay"] = +scrape_delay.value;
     }
+
+    if (use_cookies_input.checked) {
+        export_dict["cookies"] = JSON.parse(cookies_display.value).cookies;
+    }
+
     return export_dict;
 }
 
@@ -135,7 +151,7 @@ function handle_export() {
 function send_search_url() {
     const url_input = document.getElementById("url_input");
     if (url_input.value !== "") {
-        window.electronAPI.searchURL(url_input.value);
+        window.electronAPI.sendSearchURLToMain(url_input.value);
     }
 }
 
@@ -157,7 +173,7 @@ function searchbar_keypress(e) {
  */
 function test_scrape() {
     let url = document.getElementById("url_input").value;
-    window.electronAPI.sendTestContent(gen_export_dict(), url);
+    window.electronAPI.sendTestContentToMain(gen_export_dict(), url);
     document.getElementById("test_button").disabled = true;
 }
 

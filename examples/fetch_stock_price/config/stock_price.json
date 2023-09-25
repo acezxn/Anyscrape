@@ -1,1 +1,6 @@
-{"tag_name_filter":"","class_filter":"","tag_location_filter":"6.0.3.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0","scrape_delay":0}
+{
+    "filters": {
+        "tag_location_filter": "6.0.3.0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0"
+    },
+    "scrape_delay": 0
+}
