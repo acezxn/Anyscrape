@@ -18,6 +18,7 @@ To simplify the configuration of the web scraper, anyscrape-reader is a GUI appl
 - Attribute filtering
 - Location based filtering with linear expressions integrated
 - Delay customization
+- Cookie support
   
 ### Reader
 
@@ -25,3 +26,5 @@ To simplify the configuration of the web scraper, anyscrape-reader is a GUI appl
 - Automatic attribue detection and filtering
 - Element location detection
 - Export ability for configurations
+
+For example usage of the library, see [examples](https://github.com/acezxn/Anyscrape/tree/main/examples)
