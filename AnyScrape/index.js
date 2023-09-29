@@ -67,7 +67,7 @@ class Scraper {
     /**
      * Sets cookie for scraping
      *
-     * @param {*} cookies list of cookies
+     * @param {Object[]} cookies list of cookies
      * @memberof Scraper
      */
     async set_cookie(cookies) {

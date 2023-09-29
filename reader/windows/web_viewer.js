@@ -110,7 +110,7 @@ const webViewer = (url) => {
     }
     window.webContents.session.clearStorageData();
     WindowManager.web_viewer_window = window;
-    window.webContents.toggleDevTools();
+    // window.webContents.toggleDevTools();
 }
 
 
