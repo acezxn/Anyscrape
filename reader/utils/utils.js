@@ -10,9 +10,11 @@ function get_node_depthstring(root, target, depthstring = "") {
         if (root.childNodes[index].toString() === target.toString()) {
             return depthstring + index.toString();
         }
-        let search_result = get_node_depthstring(root.childNodes[index], target, depthstring + index + ".");
-        if (search_result !== "" && search_result.charAt(search_result.length - 1) !== ".") {
-            return search_result;
+        if (root.childNodes[index].toString().includes(target.toString())) {
+            let search_result = get_node_depthstring(root.childNodes[index], target, depthstring + index + ".");
+            if (search_result !== "" && search_result.charAt(search_result.length - 1) !== ".") {
+                return search_result;
+            }
         }
     }
     return depthstring;
