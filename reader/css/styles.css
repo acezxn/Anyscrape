@@ -27,22 +27,31 @@ body {
 h1 {
     font-size: min(40px, max(4vw, 30px));
     font-family: var(--title-font);
+    text-align: center;
 }
 h2 {
     font-size: min(30px, max(3vw, 20px));
     font-family: var(--title-font);
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 h3 {
     font-size: min(25px, max(2vw, 15px));
     font-family: var(--title-font);
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 h4 {
     font-size: min(23px, max(2vw, 13px));
     font-family: var(--title-font);
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 p {
     font-size: min(16px, max(2vw, 10px));
     font-family: var(--paragraph-font);
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 label {
     display: inline-block;
