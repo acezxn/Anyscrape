@@ -4,11 +4,13 @@
     --widget_hover_color: rgb(100, 100, 100);
     --widget_disabled_color: rgb(195, 195, 195);
     --foreground_color: white;
-    --accent-color: rgb(255, 0, 0);
+    --accent-color: rgb(237, 255, 135);
+    --accent-color-dark: rgb(118, 181, 0);
     --button_border_color: rgb(204, 204, 204);
     --text_border_color: rgb(146, 146, 146);
 
     --title-font: Arial, Helvetica, sans-serif;
+    --title-background: linear-gradient(to left, #e0ffd1, #d2f7fc);
     --paragraph-font: 'Verdana';
     --standard_font: system-ui;
     --monospace_font: 'Courier New', Courier, monospace;
@@ -28,6 +30,10 @@ h1 {
     font-size: min(40px, max(4vw, 30px));
     font-family: var(--title-font);
     text-align: center;
+    background-image: var(--title-background);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
 }
 h2 {
     font-size: min(30px, max(3vw, 20px));
@@ -77,6 +83,12 @@ textarea {
     text-decoration: none;
 }
 
+textarea:focus {
+    border: none;
+    border: 1px dashed var(--accent-color);
+    outline: none;
+}
+
 div[class="separator"] {
     display: block;
     height: 1vh;
@@ -92,9 +104,15 @@ input[type="text"] {
     width: 45vw;
 }
 
+input[type=text]:focus
+{
+    border-bottom: 1px dashed var(--accent-color);
+    outline: none;
+}
+
 input[type="checkbox"] {
     display: inline-block;
-    accent-color: var(--accent-color);
+    accent-color: var(--accent-color-dark);
     border: 1px solid var(--button_border_color);
 }
 
