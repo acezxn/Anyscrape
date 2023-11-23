@@ -53,16 +53,22 @@ const mainWindow = () => {
     ipc.on('search_url', (event, url) => {
         webViewer(url);
     });
+    // on receiving current url
+    ipc.on('current_url', (event, url) => {
+        window.webContents.send('current_url_data', url);
+    });
     // on receiving the document's html
     ipc.on('page_html', (event, content) => {
         raw_page_html = content;
         parsed_page_html = parser.parse(raw_page_html);
     });
 
+    // on receiving cookie data
     ipc.on('cookie_data', (event, cookie_data) => {
         window.webContents.send('cookie_data', cookie_data);
     });
 
+    // on receiving test content
     ipc.on('test_content', (event, content, url) => {
         test_scrape(content, url)
     });

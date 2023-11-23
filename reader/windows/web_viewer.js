@@ -87,7 +87,9 @@ const webViewer = (url) => {
         window.webContents.session.cookies.get({})
         .then((cookies) => {
             window.webContents.executeJavaScript(`window.electronAPI.sendCookieDataToMain(${JSON.stringify(cookies)});`);
+            window.webContents.executeJavaScript(`window.electronAPI.sendCurrentURLToMain("${window.webContents.getURL()}");`);
         });
+        
         let mouse_position = electron.screen.getCursorScreenPoint();
         let bounds = window.getContentBounds();
         let x = mouse_position.x - bounds.x;

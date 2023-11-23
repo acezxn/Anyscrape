@@ -7,6 +7,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openManual: () => ipcRenderer.send('open_manual'),
     // send search url
     sendSearchURLToMain: (url) => ipcRenderer.send('search_url', url),
+    // send current url
+    sendCurrentURLToMain: (url) => ipcRenderer.send('current_url', url),
+    // send current url to renderer
+    sendCurrentURLToRenderer: (callback) => ipcRenderer.on('current_url_data', callback),
     // get html from webpage
     sendPageHTMLToMain: (content) => ipcRenderer.send('page_html', content),
     // get selected html

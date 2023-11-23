@@ -81,6 +81,10 @@ window.electronAPI.sendElementDataToRenderer((event, tag_data) => {
     filter_settings.appendChild(tag_location_separator);
 });
 
+window.electronAPI.sendCurrentURLToRenderer((event, url) => {
+    const url_input = document.getElementById("url_input");
+    url_input.value = url;
+});
 window.electronAPI.sendCookieDataToRenderer((event, cookie_data) => {
     const cookies_display = document.getElementById("cookies_display");
     let cookie_dict = {
