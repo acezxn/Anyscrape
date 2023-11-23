@@ -7,10 +7,10 @@ async function fetch_news() {
     let scraper = new Scraper();
     await scraper.init();
 
-    await scraper.load_config_file(path.resolve("fetch_news/config/headlines.json"));
+    await scraper.load_config_file(path.resolve("fetch_news/config/latest_news.json"));
     let selected_elements = await scraper.scrape(url);
 
-    console.log("Headlines from nbcnews: \n");
+    console.log("Latest news from nbcnews: \n");
     for (let element of selected_elements) {
         let parsed = parser.parse(element);
         console.log('\x1b[36m%s\x1b[0m', parsed.textContent + "\n");

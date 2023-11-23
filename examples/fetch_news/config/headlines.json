@@ -1,7 +1,0 @@
-{
-    "filters": {
-        "tag_name_filter": "span",
-        "class_filter": "tease-card__headline"
-    },
-    "scrape_delay": 0
-}

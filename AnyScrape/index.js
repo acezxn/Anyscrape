@@ -1,6 +1,6 @@
 const parser = require("node-html-parser");
 const puppeteer = require("puppeteer");
-const { sleep, equalSet } = require("./utils/utils.js");
+const { sleep, subset } = require("./utils/utils.js");
 class Scraper {
     constructor(url) {
         this.browser = null;
@@ -119,7 +119,7 @@ class Scraper {
                         let actual_class_set = new Set(element.attributes[attr_key].split(" "));
                         let expected_class_set = new Set(value.split(" "));
 
-                        if (!equalSet(actual_class_set, expected_class_set)) {
+                        if (!subset(expected_class_set, actual_class_set)) {
                             match = false;
                             break;
                         }
