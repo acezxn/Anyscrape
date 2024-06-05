@@ -1,6 +1,6 @@
 {
   "name": "anyscrape",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Scrape any public data with ease",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/acezxn/Anyscrape.git"
+    "url": "git+https://github.com/acezxn/Anyscrape.git"
   }
 }
