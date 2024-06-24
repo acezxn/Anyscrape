@@ -1,6 +1,6 @@
 {
   "name": "anyscrape",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Scrape any public data with ease",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,8 @@
   "author": "acezxn",
   "license": "ISC",
   "dependencies": {
-    "anyscrape": "^1.0.5",
     "node-html-parser": "^6.1.10",
-    "puppeteer": "^21.2.1"
+    "puppeteer": "^22.12.0"
   },
   "repository": {
     "type": "git",
